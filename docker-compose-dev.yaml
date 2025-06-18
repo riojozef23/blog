@@ -1,0 +1,75 @@
+services:
+  # PHP-FPM service
+  app:
+    image: php:8.2-fpm
+    container_name: laravel_blog
+    volumes:
+      - ./blog:/var/www/html/blog
+    working_dir: /var/www/html/blog
+    networks:
+      - laravel
+
+  # Nginx web server
+  web:
+    image: nginx:alpine
+    container_name: nginx_blog
+    ports:
+      - "8070:80"
+    volumes:
+      - ./:/var/www/html
+      - ./conf/nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+    networks:
+      - laravel
+
+  # Composer (PHP dependency management)
+  composer:
+    image: composer:latest
+    container_name: composer_blog
+    volumes:
+      - ./blog:/var/www/html/blog
+    working_dir: /var/www/html/blog
+    #command: ["composer", "create-project", "laravel/laravel", "."]
+    command: ["sh", "-c", "composer install && tail -f /dev/null"]
+
+    networks:
+      - laravel
+
+  # Node.js (for Vite, npm run dev, dll)
+  node:
+    image: node:24.2.0-alpine
+    container_name: node_blog
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - ./blog:/var/www/html/blog
+    working_dir: /var/www/html/blog
+    ports: 
+      - "8002:8002"  
+    command: sh -c "npm install && npm run dev"
+    networks:
+      - laravel
+
+  # MySQL database
+  mysql:
+    image: mysql:8.0  # ganti dari 9.3.0 ke versi stable
+    container_name: mysql_blog
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: laravelblog
+      MYSQL_USER: blog
+      MYSQL_PASSWORD: blog12345
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3309:3306"  # optional: agar bisa diakses dari host
+    networks:
+      - laravel
+
+volumes:
+  mysql_data:
+
+networks:
+  laravel:
+    driver: bridge
