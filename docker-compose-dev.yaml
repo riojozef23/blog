@@ -6,6 +6,9 @@ services:
     volumes:
       - ./blog:/var/www/html/blog
     working_dir: /var/www/html/blog
+    build:
+      context: ./
+      dockerfile: dockerfiles/php.dockerfile
     networks:
       - laravel
 
