@@ -9,6 +9,7 @@ services:
     build:
       context: ./
       dockerfile: dockerfiles/php.dockerfile
+    user: "${UID}:${GID}"
     networks:
       - laravel
 
