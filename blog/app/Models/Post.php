@@ -23,7 +23,7 @@ class Post extends Model
         'author',
     ];
 
-    protected $table="posts";
+    protected $table="blog_posts";
     protected $primaryKey = 'id';
     public $incrementing = true;
 }

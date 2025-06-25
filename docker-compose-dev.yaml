@@ -10,6 +10,8 @@ services:
       context: ./
       dockerfile: dockerfiles/php.dockerfile
     user: "${UID}:${GID}"
+    environment:
+      HOME: /tmp
     networks:
       - laravel
 

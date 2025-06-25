@@ -37,10 +37,20 @@ Route::get('/contact', function () {
     );
 });
 
-Route::get('/posts/{slug}', function ($slug) {
+// Route::get('/posts/{slug}', function ($slug) {
 
-    $post = Post::where('slug', $slug)->first();
+//     $post = Post::where('slug', $slug)->first();
 
+//     return view(
+//         'post',
+//         [
+//             "title" => "Single Post",
+//             "post" => $post,
+//         ]
+//     );
+// });
+
+Route::get('/posts/{post:slug}', function (Post $post) {
     return view(
         'post',
         [
@@ -49,3 +59,4 @@ Route::get('/posts/{slug}', function ($slug) {
         ]
     );
 });
+
