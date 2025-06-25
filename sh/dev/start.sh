@@ -20,8 +20,14 @@ echo "🖥️ Detected OS: $OS_TYPE"
 
 if [[ "$OS_TYPE" == "Linux" || "$OS_TYPE" == "Darwin" ]]; then
   # Linux/macOS
-  MY_UID=${UID:-$(id -u)}
-  MY_GID=${GID:-$(id -g)}
+ MY_UID=${UID:-$(id -u)}
+ MY_GID=${GID:-$(id -g)}
+
+# Auto-generate .env for Docker Compose
+echo "UID=$MY_UID" > "$SCRIPT_DIR/.env"
+echo "GID=$MY_GID" >> "$SCRIPT_DIR/.env"
+
+echo -e "${BLUE}🔧 Generated .env with UID=$MY_UID and GID=$MY_GID${NC}"
 
   echo "🔐 Changing ownership to UID=$MY_UID and GID=$MY_GID"
   sudo chown -R "$MY_UID:$MY_GID" \
